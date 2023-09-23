@@ -1,0 +1,47 @@
+<resources>
+    <string name="app_name">Practica06-Rodriguez-Salazar-Hector-Mauricio</string>
+
+    <string name="titulo">Conciertos</string>
+
+    <!--    Plain text-->
+    <string name="codigo">Código</string>
+
+    <!--    Spinner-->
+    <string name="artista">Artista</string>
+    <string-array name="listaArtistas">
+        <item>Luis Miguel</item>
+        <item>Marc Anthony</item>
+        <item>Pepe Aguilar</item>
+        <item>Los tigres del Norte</item>
+    </string-array>
+
+    <string name="asiento">Sección del Asiento</string>
+    <string name="normal">Normal</string>
+    <string name="premium">Premium</string>
+
+    <!--    ListView-->
+    <string name="lugar">Lugar</string>
+
+    <string name="costo">Costo</string>
+
+    <!--    Plain text-->
+    <!--    <string name="boletos">Cantidad de boletos</string>-->
+
+    <!--    Spinner-->
+    <string name="horario">Horario</string>
+    <string-array name="listaHorario">
+        <item>6:00pm</item>
+        <item>7:00pm</item>
+        <item>8:40pm</item>
+        <item>10:00pm</item>
+    </string-array>
+
+    <!--    Botones-->
+    <string name="agregar">Agregar</string>
+    <string name="buscar">Buscar</string>
+    <string name="eliminar">Eliminar></string>
+    <string name="limpiar">Limpiar</string>
+
+    <string name="Concierto">Datos del Concierto</string>
+
+</resources>
