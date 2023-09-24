@@ -10,9 +10,9 @@ import android.widget.TextView
 
 class Mostrar : AppCompatActivity() {
 
+    //Intanciamos
     private lateinit var datos: TextView
     private lateinit var objConcierto: Concierto
-
 
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -20,13 +20,12 @@ class Mostrar : AppCompatActivity() {
         setContentView(R.layout.activity_mostrar)
 
         datos = findViewById(R.id.txtDatos)
-        objConcierto = Concierto()
+        objConcierto = Concierto() //instancia de la clase concierto, para acceder a sus atributos
 
         //instancia para recibir informacion
         val infoRecibida = intent.extras
 
-
-        val prefs = getSharedPreferences("Conciertos", Context.MODE_PRIVATE)
+        //Recibimos el contenido
         objConcierto.codigo  = infoRecibida?.getInt("codigo")!!
         objConcierto.artista = infoRecibida?.getString("artista")!!
         objConcierto.lugar = infoRecibida?.getString("lugar")!!
@@ -37,6 +36,8 @@ class Mostrar : AppCompatActivity() {
         var asiento : String? = null
         if(objConcierto.asiento == "normal") asiento = "Asiento Normal"
         if(objConcierto.asiento== "premium") asiento = "Asiento Premium"
+
+        //colocar la informacion en el textView
           datos.text = "\n\nCodigo: "+objConcierto.codigo +
                   "\n\nArtita: "+objConcierto.artista +
                   "\n\nAsiento: "+objConcierto.asiento +
@@ -48,9 +49,8 @@ class Mostrar : AppCompatActivity() {
     fun regresar(view: View){
         //Intancia para lanzar activivity Detalle
         val intent = Intent(this, MainActivity::class.java)
-        //Lanzar la activity
-        finish()
 
-    }
+        finish() //finish para que no se inicializar de nuevo la mainActivity y asi no se pieda los datos del arreglo
 
+    }//regresar
 }

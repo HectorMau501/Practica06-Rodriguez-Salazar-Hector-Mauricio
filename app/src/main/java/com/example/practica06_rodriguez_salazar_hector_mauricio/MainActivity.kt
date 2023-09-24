@@ -16,7 +16,7 @@ import android.widget.Toast
 class MainActivity : AppCompatActivity() {
 
     //Intancia de la clase concierto con arreglo
-    val tamanio = 3
+    val tamanio = 10
     var objConcierto = Array<Concierto?>(tamanio) {null}
     var contadorConciertos = 0
     private var encontrado: Boolean = false
@@ -144,10 +144,12 @@ class MainActivity : AppCompatActivity() {
     }//agregar
 
     private fun eliminar() {
+        //idEliminar como variable en la caja de texto de buscar para verificar si existe
         val idEliminar = seach.text.toString().toIntOrNull()
 
+        //Verificamos si no es nulo
         if (idEliminar != null) {
-            val encontrado = buscarElemento(idEliminar)
+            val encontrado = buscarElemento(idEliminar) //instanciamos una variable para enviar el parametro enviar a buscar elemento
 
             if (encontrado) {
                 Toast.makeText(this, "Eliminado exitosamente", Toast.LENGTH_LONG).show()
@@ -160,7 +162,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun buscarElemento(id: Int): Boolean {
-        for (i in 0 until contadorConciertos) {
+        for (i in 0 until contadorConciertos) { //buscamos
             val objetoConciertoEncontrado = objConcierto[i]
 
             if (objetoConciertoEncontrado?.codigo == id) {
@@ -170,7 +172,7 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 // Establecer el último elemento como nulo y reducir el contador
-                objConcierto[contadorConciertos - 1] = null
+                objConcierto[contadorConciertos - 1] = null //recorremos el contador
                 contadorConciertos--
 
                 return true
@@ -196,7 +198,7 @@ class MainActivity : AppCompatActivity() {
 
                     // Instancia para lanzar Activity Detalle
                     val intent = Intent(this, Mostrar::class.java)
-                    // Agregar los parámetros para enviar a la Activity
+                    // Agregar los parámetros para enviar a la Activity (indentificadores para recibir la info)
                     intent.putExtra("codigo", objetoConciertoEncontrado?.codigo)
                     intent.putExtra("artista", objetoConciertoEncontrado?.artista)
                     intent.putExtra("asiento", objetoConciertoEncontrado?.asiento)
@@ -206,17 +208,14 @@ class MainActivity : AppCompatActivity() {
 
                     // Lanzar la Activity
                     startActivity(intent)
+                }else{
+                    Toast.makeText(this, "Código no encontrado", Toast.LENGTH_LONG).show()
                 }
-            }
-
-            // Si llegamos aquí y "encontrado" es falso, significa que no se encontró el objeto
-            if (!encontrado) {
-                Toast.makeText(this, "Código no encontrado", Toast.LENGTH_LONG).show()
             }
         } else {
             Toast.makeText(this, "Debe ingresar un código", Toast.LENGTH_LONG).show()
         }
-    }
+    }//buscar
 
 
 
