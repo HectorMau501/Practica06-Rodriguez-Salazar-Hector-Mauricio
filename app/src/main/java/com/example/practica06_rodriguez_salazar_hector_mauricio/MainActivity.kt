@@ -1,6 +1,5 @@
 package com.example.practica06_rodriguez_salazar_hector_mauricio
 
-import com.example.practica06_rodriguez_salazar_hector_mauricio.Concierto
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -20,11 +19,11 @@ class MainActivity : AppCompatActivity() {
     val tamanio = 3
     var objConcierto = Array<Concierto?>(tamanio) {null}
     var contadorConciertos = 0
+    private var encontrado: Boolean = false
 
 
     //intancias
     private lateinit var seach: EditText
-//    private lateinit var code: EditText
     private lateinit var artist: Spinner
     private lateinit var seat: RadioGroup
     private lateinit var normal: RadioButton
@@ -36,14 +35,11 @@ class MainActivity : AppCompatActivity() {
     private var placeSel: String = "Auditorio Telmex"
     private var horarySel: String = "10:00pm"
 
-//    private val concierto1 = mutableMapOf<Int, Concierto>()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         seach = findViewById(R.id.editSeach)
-//        code = findViewById(R.id.editCodigo)
         artist = findViewById(R.id.spnArtista)
         seat = findViewById(R.id.rgpAsientos)
         normal = findViewById(R.id.rbNormal)
@@ -64,11 +60,9 @@ class MainActivity : AppCompatActivity() {
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
                 artistSel = lstArtista[p2]
             }
-
             override fun onNothingSelected(p0: AdapterView<*>?) {
                 TODO("Not yet implemented")
             }
-
         }
 
         //Arreglo de marcas
@@ -83,7 +77,6 @@ class MainActivity : AppCompatActivity() {
             Toast.makeText(this,"Lugar: $placeSel",Toast.LENGTH_LONG).show()
         }
 
-
         //Arreglo de artistas
         val lstHorario = resources.getStringArray(R.array.listaHorario)
         //Definir el tipo de losta y relacion con las marcas
@@ -96,39 +89,31 @@ class MainActivity : AppCompatActivity() {
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
                 horarySel = lstHorario[p2]
             }
-
             override fun onNothingSelected(p0: AdapterView<*>?) {
                 TODO("Not yet implemented")
             }
-
         }
     }//onCreate
 
     fun onClick(v: View?){
         when(v?.id){
-            R.id.ibtnAgregar -> {
-                agregar()
-            }
-            R.id.ibtnBuscar -> {
-                buscar()
-            }
-            R.id.ibtnEliminar -> {
-                eliminar()
-            }
-            R.id.ibtnLimpiar -> {
-                limpiar()
-            }
+            R.id.ibtnAgregar -> agregar()   //Llamas a la funcion agregar y la asocias con el boton Agregar
+            R.id.ibtnBuscar -> buscar()
+            R.id.ibtnEliminar -> eliminar()
+            R.id.ibtnLimpiar -> limpiar()
         }
-    }
-
+    }//onClick
 
     private fun agregar() {
-        // Validar que las cajas de texto tengan contenido
-        if (seach.text.isNotEmpty()) {
-            val codigo = seach.text.toString().toInt()
-            if (!codigoExiste(codigo)) {
+        if (seach.text.isNotEmpty()) {   // Validar que las cajas de texto tengan contenido
+            val codigo = seach.text.toString().toInt() //Variable codigo para
+
+            if (!codigoExiste(codigo)) {    // Verificar si el código ya existe con la funcion codigoExiste
                 if (contadorConciertos < tamanio) {
+
+                    //Instancia del objeto Concierto para poder acceder a los atributos y podelos poner en un objeto del arreglo
                     val objetoConcierto = Concierto()
+
                     objetoConcierto.codigo = codigo
                     objetoConcierto.artista = artistSel
                     if (normal.isChecked) objetoConcierto.asiento = "normal"
@@ -139,12 +124,14 @@ class MainActivity : AppCompatActivity() {
 
                     // Agregar el objeto Concierto al arreglo en la posición actual
                     objConcierto[contadorConciertos] = objetoConcierto
+
+                    //Se va incrementando el contanador hasta que sea menor al tamanio para que no se pueda agregar mas
                     contadorConciertos++
 
-                    // Agrega más Log.d para otros campos si es necesario
-
                     limpiar()
+
                     Toast.makeText(this, "Se ha Registrado", Toast.LENGTH_LONG).show()
+
                 } else {
                     Toast.makeText(this, "El arreglo está lleno", Toast.LENGTH_LONG).show()
                 }
@@ -154,10 +141,7 @@ class MainActivity : AppCompatActivity() {
         } else {
             Toast.makeText(this, "No se pudo registrar", Toast.LENGTH_LONG).show()
         }
-    }
-
-
-    // Resto de tu código...
+    }//agregar
 
     private fun eliminar() {
         val idEliminar = seach.text.toString().toIntOrNull()
@@ -192,41 +176,41 @@ class MainActivity : AppCompatActivity() {
                 return true
             }
         }
-
         return false
     }
 
-
-    private fun limpiar() {
-        seach.text.clear()
-        seat.clearCheck()
-        cost.text.clear()
-        seach.requestFocus()
-        Toast.makeText(this,"Cajas de texto Limpias", Toast.LENGTH_LONG).show()
-    }//Limpiar
-
-
     private fun buscar() {
-        val idBuscar = seach.text.toString()
+        val idBuscar = seach.text.toString() //Declaramos una variable buscar y lo igualamos al buscador
 
-        if (idBuscar.isNotEmpty()) {
-            val id = idBuscar.toInt()
-            val objetoConciertoEncontrado = buscarElemento(id)
+        if (idBuscar.isNotEmpty()) { //Validamos que haya un numero en la caja de texto
+            val id = idBuscar.toInt() // declaramos una variable id donde la igualamos a idBuscar y la convertimos a Int
 
-            if (objetoConciertoEncontrado != null) {
-//                // Instancia para lanzar Activity Detalle
-//                val intent = Intent(this, Mostrar::class.java)
-//                // Agregar los parámetros para enviar a la Activity
-//                intent.putExtra("codigo", objetoConciertoEncontrado.codigo)
-//                intent.putExtra("artista", objetoConciertoEncontrado.artista)
-//                intent.putExtra("asiento", objetoConciertoEncontrado.asiento)
-//                intent.putExtra("lugar", objetoConciertoEncontrado.lugar)
-//                intent.putExtra("costo", objetoConciertoEncontrado.costo)
-//                intent.putExtra("hora", objetoConciertoEncontrado.horario)
+            var encontrado = false  // Agregar esta variable para rastrear si se encontró el concierto
 
-                // Lanzar la Activity
-                startActivity(intent)
-            } else {
+            for (i in 0 until contadorConciertos) { //Iteramos entre el contador o bien buscamos el lugar
+                val objetoConciertoEncontrado = objConcierto[i]
+
+                if (objetoConciertoEncontrado?.codigo == id) {
+                    // Si se encuentra el concierto, configuramos la bandera  encontrado a true
+                    encontrado = true
+
+                    // Instancia para lanzar Activity Detalle
+                    val intent = Intent(this, Mostrar::class.java)
+                    // Agregar los parámetros para enviar a la Activity
+                    intent.putExtra("codigo", objetoConciertoEncontrado?.codigo)
+                    intent.putExtra("artista", objetoConciertoEncontrado?.artista)
+                    intent.putExtra("asiento", objetoConciertoEncontrado?.asiento)
+                    intent.putExtra("lugar", objetoConciertoEncontrado?.lugar)
+                    intent.putExtra("costo", objetoConciertoEncontrado?.costo)
+                    intent.putExtra("hora", objetoConciertoEncontrado?.horario)
+
+                    // Lanzar la Activity
+                    startActivity(intent)
+                }
+            }
+
+            // Si llegamos aquí y "encontrado" es falso, significa que no se encontró el objeto
+            if (!encontrado) {
                 Toast.makeText(this, "Código no encontrado", Toast.LENGTH_LONG).show()
             }
         } else {
@@ -234,13 +218,23 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun codigoExiste(codigo: Int): Boolean {
-        for (i in 0 until contadorConciertos) {
-            val objetoConcierto = objConcierto[i]
-            if (objetoConcierto?.codigo == codigo) {
+
+
+    private fun codigoExiste(codigo: Int): Boolean { //recibe como parametro la variable codigo y es de tipo boolean
+        for (i in 0 until contadorConciertos) { //hace una busqueda entre el contadorConciertos
+            val objetoConcierto = objConcierto[i] // se declara objetoConcierto del arreglo objConcierto donde se van a guardar
+            if (objetoConcierto?.codigo == codigo) { //Se valida que el codigo de ObjetoConcierto sea igual al codigo
                 return true
             }
         }
         return false
-    }
+    }//codigoExiste
+
+    private fun limpiar() {
+        seach.text.clear()
+        seat.clearCheck()
+        cost.text.clear()
+        seach.requestFocus()
+    }//Limpiar
+
 }//class
