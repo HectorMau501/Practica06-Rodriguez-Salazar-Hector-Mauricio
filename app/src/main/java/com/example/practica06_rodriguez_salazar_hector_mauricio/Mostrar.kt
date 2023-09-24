@@ -1,5 +1,6 @@
 package com.example.practica06_rodriguez_salazar_hector_mauricio
 
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -26,6 +27,7 @@ class Mostrar : AppCompatActivity() {
         val infoRecibida = intent.extras
 
 
+//        val prefs = getSharedPreferences("Conciertos", Context.MODE_PRIVATE)
         objetoConcierto.codigo  = infoRecibida?.getInt("codigo")!!
         objetoConcierto.artista = infoRecibida?.getString("artista")!!
         objetoConcierto.lugar = infoRecibida?.getString("lugar")!!
@@ -36,12 +38,12 @@ class Mostrar : AppCompatActivity() {
         var asiento : String? = null
         if(objetoConcierto.asiento == "normal") asiento = "Asiento Normal"
         if(objetoConcierto.asiento== "premium") asiento = "Asiento Premium"
-          datos.text = "\nCodigo: "+objetoConcierto.codigo +
-                  "\nArtita: "+objetoConcierto.artista +
-                  "\nAsiento: "+objetoConcierto.asiento +
-                  "\nLugar: "+objetoConcierto.lugar +
-                  "\nCosto: "+objetoConcierto.costo+
-                  "\nHorario: "+objetoConcierto.horario
+          datos.text = "\n\nCodigo: "+objetoConcierto.codigo +
+                  "\n\nArtita: "+objetoConcierto.artista +
+                  "\n\nAsiento: "+objetoConcierto.asiento +
+                  "\n\nLugar: "+objetoConcierto.lugar +
+                  "\n\nCosto: "+objetoConcierto.costo+
+                  "\n\nHorario: "+objetoConcierto.horario
     }
 
     fun regresar(view: View){
@@ -50,4 +52,5 @@ class Mostrar : AppCompatActivity() {
         //Lanzar la activity
         startActivity(intent)
     }
+
 }

@@ -118,7 +118,7 @@
         android:ems="10"
         android:hint="@string/costo"
         android:inputType="numberDecimal"
-        android:maxLength="5"
+        android:maxLength="8"
         android:textAlignment="center"
         android:textColor="#E5E5E5"
         android:textColorHint="#E5E5E5"

@@ -1,5 +1,6 @@
 package com.example.practica06_rodriguez_salazar_hector_mauricio
 
+import com.example.practica06_rodriguez_salazar_hector_mauricio.Concierto
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -16,8 +17,8 @@ import android.widget.Toast
 class MainActivity : AppCompatActivity() {
 
     //Intancia de la clase concierto con arreglo
-    val tamanio = 10
-    val objConcierto = Array<Concierto?>(tamanio) {null}
+    val tamanio = 3
+    var objConcierto = Array<Concierto?>(tamanio) {null}
     var contadorConciertos = 0
 
 
@@ -120,40 +121,81 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+
     private fun agregar() {
-        //Validar que las cajas de texto tengan contenido
-        if(seach.text.isNotEmpty()){
-//            val id = seach.text.toString().toInt()
-//            val index = objConcierto.indexOfFirst { it == null }
-            if(contadorConciertos < tamanio){
-                //agregar los valores al arreglo
+        // Validar que las cajas de texto tengan contenido
+        if (seach.text.isNotEmpty()) {
+            val codigo = seach.text.toString().toInt()
+            if (!codigoExiste(codigo)) {
+                if (contadorConciertos < tamanio) {
+                    val objetoConcierto = Concierto()
+                    objetoConcierto.codigo = codigo
+                    objetoConcierto.artista = artistSel
+                    if (normal.isChecked) objetoConcierto.asiento = "normal"
+                    if (gold.isChecked) objetoConcierto.asiento = "premium"
+                    objetoConcierto.lugar = placeSel
+                    objetoConcierto.horario = horarySel
+                    objetoConcierto.costo = cost.text.toString().toDouble()
 
-                val objetoConcierto = Concierto()
+                    // Agregar el objeto Concierto al arreglo en la posición actual
+                    objConcierto[contadorConciertos] = objetoConcierto
+                    contadorConciertos++
 
-                objetoConcierto.codigo = seach.text.toString().toInt()
-                objetoConcierto.artista = artistSel
-                if (normal.isChecked) objetoConcierto.asiento = "normal"
-                if (gold.isChecked) objetoConcierto.asiento = "premium"
-                objetoConcierto.lugar = placeSel
-                objetoConcierto.horario = horarySel
-                objetoConcierto.costo = cost.text.toString().toDouble()
+                    // Agrega más Log.d para otros campos si es necesario
 
-                // Agregar el objeto Concierto al arreglo en la posición actual
-                objConcierto[contadorConciertos] = objetoConcierto
-                contadorConciertos++
-
-                limpiar()
-                Toast.makeText(this,"Se ha Registrado",
-                    Toast.LENGTH_LONG).show()
-            }else{
-                Toast.makeText(this,"Esta lleno el arreglo",
-                    Toast.LENGTH_LONG).show()
+                    limpiar()
+                    Toast.makeText(this, "Se ha Registrado", Toast.LENGTH_LONG).show()
+                } else {
+                    Toast.makeText(this, "El arreglo está lleno", Toast.LENGTH_LONG).show()
+                }
+            } else {
+                Toast.makeText(this, "El código ya existe, no se puede registrar nuevamente", Toast.LENGTH_LONG).show()
             }
-        }else{
-            Toast.makeText(this,"No se pudo registrar",
-                Toast.LENGTH_LONG).show()
+        } else {
+            Toast.makeText(this, "No se pudo registrar", Toast.LENGTH_LONG).show()
         }
-    }//agregar
+    }
+
+
+    // Resto de tu código...
+
+    private fun eliminar() {
+        val idEliminar = seach.text.toString().toIntOrNull()
+
+        if (idEliminar != null) {
+            val encontrado = buscarElemento(idEliminar)
+
+            if (encontrado) {
+                Toast.makeText(this, "Eliminado exitosamente", Toast.LENGTH_LONG).show()
+            } else {
+                Toast.makeText(this, "No se pudo encontrar el elemento con código $idEliminar", Toast.LENGTH_LONG).show()
+            }
+        } else {
+            Toast.makeText(this, "Ingresa un código válido", Toast.LENGTH_LONG).show()
+        }
+    }
+
+    private fun buscarElemento(id: Int): Boolean {
+        for (i in 0 until contadorConciertos) {
+            val objetoConciertoEncontrado = objConcierto[i]
+
+            if (objetoConciertoEncontrado?.codigo == id) {
+                // Mover todos los elementos a la izquierda para llenar el espacio vacío
+                for (j in i until contadorConciertos - 1) {
+                    objConcierto[j] = objConcierto[j + 1]
+                }
+
+                // Establecer el último elemento como nulo y reducir el contador
+                objConcierto[contadorConciertos - 1] = null
+                contadorConciertos--
+
+                return true
+            }
+        }
+
+        return false
+    }
+
 
     private fun limpiar() {
         seach.text.clear()
@@ -163,38 +205,42 @@ class MainActivity : AppCompatActivity() {
         Toast.makeText(this,"Cajas de texto Limpias", Toast.LENGTH_LONG).show()
     }//Limpiar
 
-    private fun eliminar() {
-    }//Eliminar
 
     private fun buscar() {
         val idBuscar = seach.text.toString()
 
         if (idBuscar.isNotEmpty()) {
             val id = idBuscar.toInt()
+            val objetoConciertoEncontrado = buscarElemento(id)
 
-            for(i in 0 until contadorConciertos){
-                val objetoConciertoEncontrado = objConcierto[i]
+            if (objetoConciertoEncontrado != null) {
+//                // Instancia para lanzar Activity Detalle
+//                val intent = Intent(this, Mostrar::class.java)
+//                // Agregar los parámetros para enviar a la Activity
+//                intent.putExtra("codigo", objetoConciertoEncontrado.codigo)
+//                intent.putExtra("artista", objetoConciertoEncontrado.artista)
+//                intent.putExtra("asiento", objetoConciertoEncontrado.asiento)
+//                intent.putExtra("lugar", objetoConciertoEncontrado.lugar)
+//                intent.putExtra("costo", objetoConciertoEncontrado.costo)
+//                intent.putExtra("hora", objetoConciertoEncontrado.horario)
 
-                if (objetoConciertoEncontrado?.codigo == id) {
-                    //Instancia para lanzar Activity Detalle
-                    val intent = Intent(this, Mostrar::class.java)
-                    //Agregar los parametros para enviar a la Activity
-                    intent.putExtra("codigo", objetoConciertoEncontrado.codigo)
-                    intent.putExtra("artista",objetoConciertoEncontrado.artista)
-                    intent.putExtra("asiento",objetoConciertoEncontrado.asiento)
-                    intent.putExtra("lugar",objetoConciertoEncontrado.lugar)
-                    intent.putExtra("costo",objetoConciertoEncontrado.costo)
-                    intent.putExtra("hora",objetoConciertoEncontrado.horario)
-
-                    //Lanzar la Activity
-                    startActivity(intent)
-                    return
-                } else {
-                    Toast.makeText(this, "Código no encontrado", Toast.LENGTH_LONG).show()
-                }
+                // Lanzar la Activity
+                startActivity(intent)
+            } else {
+                Toast.makeText(this, "Código no encontrado", Toast.LENGTH_LONG).show()
             }
-        }else {
+        } else {
             Toast.makeText(this, "Debe ingresar un código", Toast.LENGTH_LONG).show()
         }
+    }
+
+    private fun codigoExiste(codigo: Int): Boolean {
+        for (i in 0 until contadorConciertos) {
+            val objetoConcierto = objConcierto[i]
+            if (objetoConcierto?.codigo == codigo) {
+                return true
+            }
+        }
+        return false
     }
 }//class
